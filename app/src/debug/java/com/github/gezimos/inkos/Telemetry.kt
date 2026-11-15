@@ -15,8 +15,6 @@ object Telemetry {
             httpExport { baseUrl = "http://127.0.0.1:4318" }
             resource { put("service.name", "inkos") }
             diskBuffering { enabled(false) }
-            // agent 1.7 slow-render listener calls Duration.toSeconds(), absent before API 31 (fixed in 1.8)
-            instrumentations { slowRenderingReporter { enabled(false) } }
         }
     }
 

@@ -171,11 +171,14 @@ dependencies {
 
     // Jetpack Compose Testing
     androidTestImplementation(libs.ui.test.junit4) // For createComposeRule
-    debugImplementation("io.opentelemetry.android:android-agent:1.7.0")
+    debugImplementation("io.opentelemetry.android:android-agent:1.8.1")
     constraints {
         // Keep the agent's transitive androidx versions at the app's own (newer ones need AGP 9.1)
         debugImplementation("androidx.core:core-ktx") { version { strictly(libs.versions.core.ktx.get()) } }
         debugImplementation("androidx.core:core") { version { strictly(libs.versions.core.ktx.get()) } }
+        // okhttp 5.5 (via the OTel exporter) needs compileSdk 37; 5.4 is the newest that builds on 36
+        debugImplementation("com.squareup.okhttp3:okhttp") { version { strictly("5.4.0") } }
+        debugImplementation("com.squareup.okhttp3:okhttp-android") { version { strictly("5.4.0") } }
         debugImplementation("androidx.lifecycle:lifecycle-runtime-compose-android") { version { strictly(libs.versions.lifecycle.viewmodel.ktx.get()) } }
     }
     testImplementation(libs.junit)
