@@ -12,6 +12,7 @@ class inkOS : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Telemetry.init(this)
 
         Thread.setDefaultUncaughtExceptionHandler(CrashHandler(applicationContext))
 

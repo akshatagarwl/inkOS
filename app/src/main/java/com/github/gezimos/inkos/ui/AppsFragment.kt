@@ -69,6 +69,7 @@ import com.github.gezimos.inkos.ui.compose.AppsDrawerLayout
 import com.github.gezimos.inkos.ui.compose.EditModeOverlay
 import com.github.gezimos.inkos.ui.compose.NavHelper
 import com.github.gezimos.inkos.helper.SearchHelper
+import com.github.gezimos.inkos.Telemetry
 import com.github.gezimos.inkos.ui.compose.gestureHelper
 import com.github.gezimos.inkos.ui.dialogs.ComposeDialogManager
 import androidx.core.net.toUri
@@ -478,6 +479,7 @@ class AppsFragment : Fragment() {
                         } else if (!isSearchActive) {
                             sortedApps
                         } else {
+                            Telemetry.span("search.filter", mapOf("query.length" to query.length, "query.digits" to query.all(Char::isDigit), "apps.count" to sortedApps.size)) {
                             buildList {
                                 val normalizedQuery = SearchHelper.normalizeString(query)
                                 val t9 = SearchHelper.isT9Query(normalizedQuery)
@@ -539,6 +541,7 @@ class AppsFragment : Fragment() {
                                 if (appsDrawer.appDrawerSearchWebEnabled) {
                                     add(SearchHelper.createWebSearchItem(query))
                                 }
+                            }
                             }
                         }
                     }

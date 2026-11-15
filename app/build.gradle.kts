@@ -99,15 +99,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
     lint {
         abortOnError = false
     }
 
     packaging {
+        // OpenTelemetry jars (debug only) each ship this OSGi manifest
+        resources.excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
         // Keep debug symbols for specific native libraries
         // found in /app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib
         jniLibs {
@@ -173,6 +171,13 @@ dependencies {
 
     // Jetpack Compose Testing
     androidTestImplementation(libs.ui.test.junit4) // For createComposeRule
+    debugImplementation("io.opentelemetry.android:android-agent:1.7.0")
+    constraints {
+        // Keep the agent's transitive androidx versions at the app's own (newer ones need AGP 9.1)
+        debugImplementation("androidx.core:core-ktx") { version { strictly(libs.versions.core.ktx.get()) } }
+        debugImplementation("androidx.core:core") { version { strictly(libs.versions.core.ktx.get()) } }
+        debugImplementation("androidx.lifecycle:lifecycle-runtime-compose-android") { version { strictly(libs.versions.lifecycle.viewmodel.ktx.get()) } }
+    }
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     debugImplementation(libs.ui.test.manifest) // Debug-only dependencies for Compose testing
@@ -182,4 +187,8 @@ dependencies {
 
     // Navigation testing
     androidTestImplementation(libs.navigation.testing)
+}
+
+kotlin {
+    compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
 }
